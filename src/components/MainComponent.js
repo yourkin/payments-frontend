@@ -5,6 +5,7 @@ import { actions } from 'react-redux-form';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Transfer from './TransferComponent';
+import History from './HistoryComponent';
 
 const mapStateToProps = state => {
     return {
@@ -22,7 +23,12 @@ class Main extends Component {
         return (
             <div>
                 <Header />
-                <Transfer />
+                <div>
+                    <Switch>
+                        <Route path='/home/' component={Transfer} />
+                        <Route path='/history/' component={History} />
+                    </Switch>
+                </div>
                 <Footer />
             </div>
         );
