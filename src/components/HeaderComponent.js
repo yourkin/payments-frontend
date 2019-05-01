@@ -14,7 +14,7 @@ class Header extends Component {
             isLoginModalOpen: false,
             isRegisterModalOpen: false,
             loggedIn: !!localStorage.getItem('token'),
-            username: ''
+            username: localStorage.getItem('username')
         };
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
@@ -36,6 +36,7 @@ class Header extends Component {
             .then(res => res.json())
             .then(json => {
                 localStorage.setItem('token', json.token);
+                localStorage.setItem('username', json.username);
                 this.setState({
                     loggedIn: true,
                     username: json.username
@@ -56,6 +57,7 @@ class Header extends Component {
             .then(res => res.json())
             .then(json => {
                 localStorage.setItem('token', json.token);
+                localStorage.setItem('username', json.user.username);
                 this.setState({
                     loggedIn: true,
                     username: json.user.username
@@ -66,6 +68,7 @@ class Header extends Component {
 
     handleLogout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         this.setState({ loggedIn: false, username: '' });
     };
 
@@ -162,11 +165,11 @@ class Header extends Component {
                                 <NavLink className="nav-link" to="/home">
                                     <span className="fa fa-home fa-lg"> Home</span>
                                 </NavLink>
-                                <NavLink className="nav-link" to="/aboutus">
-                                    <span className="fa fa-info fa-lg"> About Us</span>
+                                <NavLink className="nav-link" to="/accounts">
+                                    <span className="fa fa-info fa-lg"> Accounts</span>
                                 </NavLink>
-                                <NavLink className="nav-link" to="/menu">
-                                    <span className="fa fa-list fa-lg"> Menu</span>
+                                <NavLink className="nav-link" to="/transactions">
+                                    <span className="fa fa-list fa-lg"> Transactions</span>
                                 </NavLink>
                                 <NavLink className="nav-link" to="/contactus">
                                     <span className="fa fa-address-card fa-lg"> Contact Us</span>

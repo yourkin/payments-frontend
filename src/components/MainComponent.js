@@ -3,6 +3,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 import Header from './HeaderComponent';
+import Footer from './FooterComponent';
 
 const mapStateToProps = state => {
     return {
@@ -20,6 +21,7 @@ class Main extends Component {
         return (
             <div>
                 <Header />
+                <Footer />
             </div>
         );
     }
