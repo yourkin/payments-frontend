@@ -156,7 +156,7 @@ class Header extends Component {
 
                         <NavbarToggler onClick={this.toggleNav} />
 
-                        <NavbarBrand className="mr-auto" href="/">
+                        <NavbarBrand className="mr-auto">
                             <img src="assets/images/pay-logo.jpg" height="75" width="75" alt="Pay Logo" />
                         </NavbarBrand>
 

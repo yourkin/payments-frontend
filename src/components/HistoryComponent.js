@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TRANSACTIONS } from '../shared/transactions';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 function History(props) {
@@ -18,7 +17,7 @@ function History(props) {
 
     return (
         <div className="container">
-            <BootstrapTable keyField='id' data={ products } columns={ columns } />
+            <BootstrapTable keyField='id' data={ products } columns={ columns } bootstrap4={ true } />
         </div>
     )
 }
