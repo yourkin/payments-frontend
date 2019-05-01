@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { ConfigureStore } from "./redux/configureStore";
+
 import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import './App.css';
+
+const store = ConfigureStore();
 
 class App extends Component {
   constructor(props) {
@@ -93,19 +99,23 @@ class App extends Component {
     }
 
     return (
-        <div className="App">
-          <Nav
-              loggedIn={this.state.loggedIn}
-              displayForm={this.displayForm}
-              handleLogout={this.handleLogout}
-          />
-          {form}
-          <h3>
-            {this.state.loggedIn
-                ? `Hello, ${this.state.username}`
-                : 'Please Log In'}
-          </h3>
-        </div>
+        <Provider store={store}>
+          <BrowserRouter>
+            <div className="App">
+              <Nav
+                  loggedIn={this.state.loggedIn}
+                  displayForm={this.displayForm}
+                  handleLogout={this.handleLogout}
+              />
+              {form}
+              <h3>
+                {this.state.loggedIn
+                    ? `Hello, ${this.state.username}`
+                    : 'Please Log In'}
+              </h3>
+            </div>
+          </BrowserRouter>
+        </Provider>
     );
   }
 }
