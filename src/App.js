@@ -5,10 +5,6 @@ import { ConfigureStore } from "./redux/configureStore";
 import Main from './components/MainComponent';
 import './App.css';
 
-import Nav from './components/Nav';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
-
 const store = ConfigureStore();
 
 class App extends Component {
