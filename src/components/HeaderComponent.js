@@ -7,13 +7,13 @@ import { baseUrl } from "../shared/baseUrl";
 
 class Header extends Component {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             isNavOpen: false,
             isLoginModalOpen: false,
             isRegisterModalOpen: false,
-            loggedIn: false,
+            loggedIn: !!localStorage.getItem('token'),
             username: ''
         };
         this.toggleNav = this.toggleNav.bind(this);
@@ -21,6 +21,7 @@ class Header extends Component {
         this.toggleRegisterModal = this.toggleRegisterModal.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegistration = this.handleRegistration.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleRegistration(event) {
@@ -63,6 +64,11 @@ class Header extends Component {
             });
     };
 
+    handleLogout() {
+        localStorage.removeItem('token');
+        this.setState({ loggedIn: false, username: '' });
+    };
+
     toggleNav() {
         this.setState({
             isNavOpen: !this.state.isNavOpen
@@ -81,11 +87,11 @@ class Header extends Component {
         });
     }
 
-    render () {
+    render() {
 
         const RenderNavButtons = ({isLoggedIn}) => {
 
-            if (isLoggedIn) {
+            if (!isLoggedIn) {
                 return (
                     <NavItem>
                         <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
@@ -96,7 +102,7 @@ class Header extends Component {
             else
                 return (
                     <NavItem>
-                        <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Logout</Button>{' '}
+                        <Button outline onClick={this.handleLogout}><span className="fa fa-sign-in"></span> Logout {this.state.username}</Button>
                     </NavItem>
                 )
         };
