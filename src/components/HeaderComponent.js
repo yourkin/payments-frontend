@@ -4,27 +4,50 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
-
 class Header extends Component {
 
     constructor (props) {
         super(props);
         this.state = {
             isNavOpen: false,
-            isModalOpen: false
+            isLoginModalOpen: false,
+            isRegisterModalOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
+        this.toggleLoginModal = this.toggleLoginModal.bind(this);
+        this.toggleRegisterModal = this.toggleRegisterModal.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+        this.handleRegistration = this.handleRegistration.bind(this);
     }
 
     handleLogin(event) {
-        this.toggleModal();
+        this.toggleLoginModal();
         alert("Username: " + this.username.value + " Password: " + this.password.value
             + " Remember: " + this.remember.checked);
         event.preventDefault();
 
     }
+
+    handleRegistration(event) {
+        event.preventDefault();
+        fetch('http://localhost:8000/core/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'username': this.username.value, 'password': this.password.value})
+        })
+            .then(res => res.json())
+            .then(json => {
+                localStorage.setItem('token', json.token);
+                this.setState({
+                    loggedIn: true,
+                    displayedForm: '',
+                    username: json.username
+                });
+                this.toggleRegisterModal();
+            });
+    };
 
     toggleNav() {
         this.setState({
@@ -32,17 +55,24 @@ class Header extends Component {
         });
     }
 
-    toggleModal() {
+    toggleLoginModal() {
         this.setState({
-            isModalOpen: !this.state.isModalOpen
+            isLoginModalOpen: !this.state.isLoginModalOpen
+        });
+    }
+
+    toggleRegisterModal() {
+        this.setState({
+            isRegisterModalOpen: !this.state.isRegisterModalOpen
         });
     }
 
     render () {
         return (
             <React.Fragment>
-                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+
+                <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
+                    <ModalHeader toggle={this.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
@@ -66,12 +96,35 @@ class Header extends Component {
                         </Form>
                     </ModalBody>
                 </Modal>
+
+                <Modal isOpen={this.state.isRegisterModalOpen} toggle={this.toggleRegisterModal}>
+                    <ModalHeader toggle={this.toggleRegisterModal}>Register</ModalHeader>
+                    <ModalBody>
+                        <Form onSubmit={this.handleRegistration}>
+                            <FormGroup>
+                                <Label htmlFor="username">Username</Label>
+                                <Input type="text" id="username" name="username"
+                                       innerRef={(input) => this.username = input} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="password">Password</Label>
+                                <Input type="password" id="password" name="password"
+                                       innerRef={(input) => this.password = input}  />
+                            </FormGroup>
+                            <Button type="submit" value="submit" color="primary">Register</Button>
+                        </Form>
+                    </ModalBody>
+                </Modal>
+
                 <Navbar dark expand="md">
                     <div className="container">
+
                         <NavbarToggler onClick={this.toggleNav} />
+
                         <NavbarBrand className="mr-auto" href="/">
                             <img src="assets/images/pay-logo.jpg" height="75" width="75" alt="Pay Logo" />
                         </NavbarBrand>
+
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavLink className="nav-link" to="/home">
@@ -88,13 +141,17 @@ class Header extends Component {
                                 </NavLink>
                             </Nav>
                         </Collapse>
+
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <Button outline onClick={this.toggleModal}><span className="fa fa-sign-in fa-lg"></span> Login</Button>
+                                <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
+                                <Button outline onClick={this.toggleRegisterModal}><span className="fa fa-user-plus"></span> Register</Button>
                             </NavItem>
                         </Nav>
+
                     </div>
                 </Navbar>
+
                 <Jumbotron>
                     <div className="container">
                         <div className="row row-header">
@@ -105,6 +162,7 @@ class Header extends Component {
                         </div>
                     </div>
                 </Jumbotron>
+
             </React.Fragment>
         )
     }
