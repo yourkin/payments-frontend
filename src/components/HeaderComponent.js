@@ -3,6 +3,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { baseUrl } from "../shared/baseUrl";
 
 class Header extends Component {
 
@@ -11,7 +12,9 @@ class Header extends Component {
         this.state = {
             isNavOpen: false,
             isLoginModalOpen: false,
-            isRegisterModalOpen: false
+            isRegisterModalOpen: false,
+            loggedIn: false,
+            username: ''
         };
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
@@ -20,17 +23,9 @@ class Header extends Component {
         this.handleRegistration = this.handleRegistration.bind(this);
     }
 
-    handleLogin(event) {
-        this.toggleLoginModal();
-        alert("Username: " + this.username.value + " Password: " + this.password.value
-            + " Remember: " + this.remember.checked);
-        event.preventDefault();
-
-    }
-
     handleRegistration(event) {
         event.preventDefault();
-        fetch('http://localhost:8000/core/users/', {
+        fetch(baseUrl + 'core/users/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,10 +37,29 @@ class Header extends Component {
                 localStorage.setItem('token', json.token);
                 this.setState({
                     loggedIn: true,
-                    displayedForm: '',
                     username: json.username
                 });
                 this.toggleRegisterModal();
+            });
+    };
+
+    handleLogin(event) {
+        event.preventDefault();
+        fetch(baseUrl + 'token-auth/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'username': this.username.value, 'password': this.password.value})
+        })
+            .then(res => res.json())
+            .then(json => {
+                localStorage.setItem('token', json.token);
+                this.setState({
+                    loggedIn: true,
+                    username: json.user.username
+                });
+                this.toggleLoginModal();
             });
     };
 
@@ -68,6 +82,25 @@ class Header extends Component {
     }
 
     render () {
+
+        const RenderNavButtons = ({isLoggedIn}) => {
+
+            if (isLoggedIn) {
+                return (
+                    <NavItem>
+                        <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
+                        <Button outline onClick={this.toggleRegisterModal}><span className="fa fa-user-plus"></span> Register</Button>
+                    </NavItem>
+                )
+            }
+            else
+                return (
+                    <NavItem>
+                        <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Logout</Button>{' '}
+                    </NavItem>
+                )
+        };
+
         return (
             <React.Fragment>
 
@@ -84,13 +117,6 @@ class Header extends Component {
                                 <Label htmlFor="password">Password</Label>
                                 <Input type="password" id="password" name="password"
                                        innerRef={(input) => this.password = input}  />
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="remember"
-                                           innerRef={(input) => this.remember = input}  />
-                                    Remember me
-                                </Label>
                             </FormGroup>
                             <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
@@ -143,10 +169,7 @@ class Header extends Component {
                         </Collapse>
 
                         <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
-                                <Button outline onClick={this.toggleRegisterModal}><span className="fa fa-user-plus"></span> Register</Button>
-                            </NavItem>
+                            <RenderNavButtons isLoggedIn={this.state.loggedIn} />
                         </Nav>
 
                     </div>
