@@ -188,8 +188,8 @@ class Header extends Component {
                     <div className="container">
                         <div className="row row-header">
                             <div className="col-12 col-sm-6">
-                                <h1>Fast Payments Prototype</h1>
-                                <p>Faster Payments Service is an initiative to reduce payment times between customer accounts from three working days that transfers take using the long-established system, to typically a few seconds.</p>
+                                <h3>Fast Payments Prototype</h3>
+                                <p>Faster Payments Service is an initiative to reduce payment times</p>
                             </div>
                         </div>
                     </div>

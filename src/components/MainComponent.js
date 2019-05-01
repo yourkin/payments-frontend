@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
+import Transfer from './TransferComponent';
 
 const mapStateToProps = state => {
     return {
@@ -21,6 +22,7 @@ class Main extends Component {
         return (
             <div>
                 <Header />
+                <Transfer />
                 <Footer />
             </div>
         );
