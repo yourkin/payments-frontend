@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-import Transfer from './TransferComponent';
+import TransferFunds from './TransferFundsComponent';
 import History from './HistoryComponent';
 
 function Main() {
@@ -12,7 +12,7 @@ function Main() {
             <Header />
             <div>
                 <Switch>
-                    <Route path='/home/' component={Transfer} />
+                    <Route path='/home/' component={TransferFunds} />
                     <Route path='/history/' component={History} />
                     <Redirect to='/home/' />
                 </Switch>
