@@ -7990,6 +7990,11 @@ react-bootstrap-table-next@^3.1.2:
     react-transition-group "2.5.3"
     underscore "1.9.1"
 
+react-bootstrap-table2-filter@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-table2-filter/-/react-bootstrap-table2-filter-1.1.9.tgz#649680e1ecc963fac3df956c70506a77c3473e88"
+  integrity sha512-v8cauC+yCkx5j44ZZ9Gm0yQjCGYIdPvJ4NNB01Xwxz3kFri5fJIesr87LGqLHfh9LnXSsVLW07y8YPCv6sdl/g==
+
 react-dev-utils@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.0.tgz#356d95db442441c5d4748e0e49f4fd1e71aecbbd"

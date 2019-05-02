@@ -1,23 +1,33 @@
 import React from 'react';
 import { TRANSACTIONS } from '../shared/transactions';
 import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 
 function History(props) {
-    const products = ['one', 'two', 'three'];
+    const data = TRANSACTIONS;
     const columns = [{
         dataField: 'id',
-        text: 'Transaction ID'
+        text: 'Transaction ID',
+        sort: true
     }, {
-        dataField: 'name',
-        text: 'Client Name'
+        dataField: 'sender_account',
+        text: 'Sender',
+        sort: true,
+        filter: textFilter()
     }, {
-        dataField: 'amount',
-        text: 'Transfer Amount'
+        dataField: 'receiver_account',
+        text: 'Receiver',
+        sort: true,
+        filter: textFilter()
+    }, {
+        dataField: 'sent_amount',
+        text: 'Transfer Amount',
+        sort: true
     }];
 
     return (
         <div className="container">
-            <BootstrapTable keyField='id' data={ products } columns={ columns } bootstrap4={ true } />
+            <BootstrapTable keyField='id' data={ data } columns={ columns } bootstrap4 filter={ filterFactory() } />
         </div>
     )
 }

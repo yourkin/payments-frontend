@@ -40,7 +40,7 @@ function Footer(props) {
                 </div>
                 <div className="row justify-content-center">
                     <div className="col-auto">
-                        <p>© Copyright 2019 Proto Prototypes Inc.</p>
+                        <p>© Copyright 2019 Fast Prototypes Inc.</p>
                     </div>
                 </div>
             </div>
