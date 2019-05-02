@@ -4,6 +4,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { baseUrl } from "../shared/baseUrl";
+import { API_TOKEN } from '../shared/localStorage';
 
 class Header extends Component {
 
@@ -13,7 +14,7 @@ class Header extends Component {
             isNavOpen: false,
             isLoginModalOpen: false,
             isRegisterModalOpen: false,
-            loggedIn: !!localStorage.getItem('token'),
+            loggedIn: !!localStorage.getItem(API_TOKEN),
             username: localStorage.getItem('username')
         };
         this.toggleNav = this.toggleNav.bind(this);
@@ -35,7 +36,7 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem('token', json.token);
+                localStorage.setItem(API_TOKEN, json.token);
                 localStorage.setItem('username', json.username);
                 this.setState({
                     loggedIn: true,
@@ -56,7 +57,7 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem('token', json.token);
+                localStorage.setItem(API_TOKEN, json.token);
                 localStorage.setItem('username', json.user.username);
                 this.setState({
                     loggedIn: true,
@@ -67,7 +68,7 @@ class Header extends Component {
     };
 
     handleLogout() {
-        localStorage.removeItem('token');
+        localStorage.removeItem(API_TOKEN);
         localStorage.removeItem('username');
         this.setState({ loggedIn: false, username: '' });
     };

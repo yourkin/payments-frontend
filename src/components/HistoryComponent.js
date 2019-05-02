@@ -3,7 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import { Loading } from './LoadingComponent';
 import { fetchTransactions } from '../redux/ActionCreators';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 const mapStateToProps = state => {
     return {

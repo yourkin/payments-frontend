@@ -2,16 +2,33 @@ import React, { Component } from 'react';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
 import { USER } from '../shared/user';
-import { ACCOUNTS } from '../shared/accounts';
+import { Loading } from './LoadingComponent';
+import { fetchAccounts } from '../redux/ActionCreators';
+import { connect } from "react-redux";
+
+const mapStateToProps = state => {
+    return {
+        accounts: state.accounts
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+    fetchAccounts: () => { dispatch(fetchAccounts()) }
+});
 
 const required = (val) => val && val.length;
 
-class Transfer extends Component {
+class TransferFunds extends Component {
 
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    componentWillMount() {
+        this.props.fetchAccounts();
+    }
+
 
     handleSubmit(values) {
         alert('Current State is: ' + JSON.stringify(values));
@@ -24,7 +41,7 @@ class Transfer extends Component {
             )
         });
 
-        const otherAccounts = ACCOUNTS.map((account) => {
+        const otherAccounts = this.props.accounts.accounts.map((account) => {
             return (
                 <option key={account.uuid} value={account.uuid}>{account.client} ({account.currency})</option>
             )
@@ -43,7 +60,8 @@ class Transfer extends Component {
                                 <Label htmlFor="account" md={2}>From account:</Label>
                                 <Col md={4}>
                                     <Control.select className="form-control" model=".account" id="account"
-                                                    name="account" defaultValue={USER.accounts[0].uuid}>
+                                                    defaultValue="" name="account">
+                                        <option value="" disabled>-------------------------------</option>
                                         {ownAccounts}
                                     </Control.select>
                                 </Col>
@@ -52,8 +70,9 @@ class Transfer extends Component {
                             <Row className="form-group">
                                 <Label htmlFor="receiver" md={2}>To account:</Label>
                                 <Col md={4}>
-                                    <Control.select className="form-control" model=".receiver" id="receiver"
-                                                    name="receiver" defaultValue={ACCOUNTS[0].uuid}>
+                                    <Control.select className="form-control" defaultValue=""
+                                                    model=".receiver" id="receiver" name="receiver">
+                                        <option value="" disabled>-------------------------------</option>
                                         {otherAccounts}
                                     </Control.select>
                                 </Col>
@@ -85,4 +104,4 @@ class Transfer extends Component {
     }
 }
 
-export default Transfer;
+export default connect(mapStateToProps, mapDispatchToProps)(TransferFunds);
