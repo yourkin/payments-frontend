@@ -1,5 +1,16 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import { API_TOKEN } from "../shared/localStorage";
+
+export const setApiToken = (value) => ({
+    type: ActionTypes.SET_API_TOKEN,
+    payload: value
+});
+
+export const unsetApiToken = (value) => ({
+    type: ActionTypes.UNSET_API_TOKEN,
+    payload: value
+});
 
 export const transactionsLoading = () => ({
    type: ActionTypes.TRANSACTIONS_LOADING
@@ -19,8 +30,17 @@ export const fetchTransactions = () => (dispatch) => {
 
     dispatch(transactionsLoading(true));
 
-    return fetch(baseUrl + 'transactions/').
-        then(response => {
+    const token = localStorage.getItem('token');
+
+    let request = new Request(baseUrl + 'transactions/', {
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'JWT ' + token
+        })
+    });
+
+    return fetch(request)
+        .then(response => {
                 if (response.ok) {
                     return response;
                 } else {

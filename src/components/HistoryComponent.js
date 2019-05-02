@@ -1,16 +1,27 @@
-import React from 'react';
-import { TRANSACTIONS } from '../shared/transactions';
+import React, { Component } from 'react';
+// import { TRANSACTIONS } from '../shared/transactions';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter, dateFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import { Loading } from './LoadingComponent';
+import { fetchTransactions } from '../redux/ActionCreators';
+import {connect} from "react-redux";
 
-//     "conversion_rate": 0.9,
-//     "received_amount": "9.00",
+const mapStateToProps = state => {
+    return {
+        transactions: state.transactions
+    }
+};
 
-function History(props) {
+const mapDispatchToProps = dispatch => ({
+    fetchTransactions: () => { dispatch(fetchTransactions()) }
+});
+
+function RenderHistory({data, isLoading, errMess}) {
+
     const dateFormatter = (date) => {
         return date;
     };
-    const data = TRANSACTIONS;
+
     const columns = [{
         dataField: 'transaction_date',
         text: 'Date',
@@ -58,11 +69,40 @@ function History(props) {
         filter: textFilter()
     }];
 
-    return (
-        <div className="ml-md-5 mr-md-5">
-            <BootstrapTable keyField='id' data={ data } columns={ columns } bootstrap4 filter={ filterFactory() } />
-        </div>
-    )
+    if (isLoading) {
+        return (
+            <Loading />
+        );
+    }
+    else if (errMess) {
+        return (
+            <h4>{errMess}</h4>
+        )
+    }
+    else
+        return (
+            <div className="ml-md-5 mr-md-5">
+                <BootstrapTable keyField='id' data={ data } columns={ columns } bootstrap4 filter={ filterFactory() } />
+            </div>
+        )
 }
 
-export default History;
+class History extends Component {
+    render () {
+        return (
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col">
+                        <RenderHistory
+                            data={this.props.transactions.transactions}
+                            isLoading={this.props.transactions.isLoading}
+                            errMess={this.props.transactions.errMess}
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(History);
