@@ -59,7 +59,7 @@ function History(props) {
     }];
 
     return (
-        <div className="m-5">
+        <div className="ml-md-5 mr-md-5">
             <BootstrapTable keyField='id' data={ data } columns={ columns } bootstrap4 filter={ filterFactory() } />
         </div>
     )

@@ -1,9 +1,9 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { thunk } from 'redux-thunk';
-import { logger } from 'redux-logger';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
+import { Transactions} from './transactions';
 import { USERS } from '../shared/users';
-import { TRANSACTIONS } from '../shared/transactions';
 import { ACCOUNTS } from '../shared/accounts';
 import { USER } from '../shared/user';
 import { InitialTransfer } from './forms';
@@ -13,12 +13,13 @@ export const ConfigureStore = () => {
         combineReducers({
             users: USERS,
             accounts: ACCOUNTS,
-            transactions: TRANSACTIONS,
+            transactions: Transactions,
             user: USER,
             ...createForms({
                 transfer: InitialTransfer
             })
-        })
+        }),
+        applyMiddleware(thunk, logger)
     );
 
     return store;

@@ -6,17 +6,23 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Transfer from './TransferComponent';
 import History from './HistoryComponent';
+import { fetchTransactions} from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
-        dishes: state.dishes,
-        comments: state.comments,
-        promotions: state.promotions,
-        leaders: state.leaders
+        transactions: state.transactions
     }
 };
 
+const mapDispatchToProps = dispatch => ({
+    fetchTransactions: () => { dispatch(fetchTransactions()) }
+});
+
 class Main extends Component {
+
+    componentDidMount() {
+        this.props.fetchTransactions();
+    }
 
     render() {
 
@@ -35,4 +41,4 @@ class Main extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
