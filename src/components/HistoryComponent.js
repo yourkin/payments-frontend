@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { TRANSACTIONS } from '../shared/transactions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import { Loading } from './LoadingComponent';
@@ -88,6 +87,11 @@ function RenderHistory({data, isLoading, errMess}) {
 }
 
 class History extends Component {
+
+    componentDidMount() {
+        this.props.fetchTransactions();
+    }
+
     render () {
         return (
             <div className="container-fluid">
