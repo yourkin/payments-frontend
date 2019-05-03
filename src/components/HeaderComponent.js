@@ -2,9 +2,22 @@ import React, {Component} from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { baseUrl } from "../shared/baseUrl";
 import { API_TOKEN } from '../shared/localStorage';
+import { setApiToken, unsetApiToken } from '../redux/ActionCreators';
+import { connect } from "react-redux";
+
+const mapStateToProps = state => {
+    return {
+        apiToken: state.apiToken
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+    setApiToken: (token) => { dispatch(setApiToken(token)) },
+    unsetApiToken: () => { dispatch(unsetApiToken()) }
+});
 
 class Header extends Component {
 
@@ -14,7 +27,7 @@ class Header extends Component {
             isNavOpen: false,
             isLoginModalOpen: false,
             isRegisterModalOpen: false,
-            loggedIn: !!localStorage.getItem(API_TOKEN),
+            loggedIn: !!this.props.apiToken,
             username: localStorage.getItem('username')
         };
         this.toggleNav = this.toggleNav.bind(this);
@@ -36,10 +49,8 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem(API_TOKEN, json.token);
-                localStorage.setItem('username', json.username);
+                this.props.setApiToken(json.token);
                 this.setState({
-                    loggedIn: true,
                     username: json.username
                 });
                 this.toggleRegisterModal();
@@ -57,10 +68,8 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem(API_TOKEN, json.token);
-                localStorage.setItem('username', json.user.username);
+                this.props.setApiToken(json.token);
                 this.setState({
-                    loggedIn: true,
                     username: json.user.username
                 });
                 this.toggleLoginModal();
@@ -68,8 +77,7 @@ class Header extends Component {
     };
 
     handleLogout() {
-        localStorage.removeItem(API_TOKEN);
-        localStorage.removeItem('username');
+        this.props.unsetApiToken();
         this.setState({ loggedIn: false, username: '' });
     };
 
@@ -198,4 +206,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

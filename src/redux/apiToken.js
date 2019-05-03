@@ -6,8 +6,8 @@ const initialState = localStorage.getItem(API_TOKEN);
 export const ApiToken = (state = initialState, action) => {
     switch (action.type) {
         case ActionTypes.SET_API_TOKEN:
-            localStorage.setItem(API_TOKEN, action.value);
-            return action.value;
+            localStorage.setItem(API_TOKEN, action.payload);
+            return action.payload;
         case ActionTypes.UNSET_API_TOKEN:
             localStorage.removeItem(API_TOKEN);
             return initialState;
