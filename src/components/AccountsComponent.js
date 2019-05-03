@@ -26,7 +26,7 @@ function RenderTable({data, isLoading, errMess}) {
             <h4>{errMess}</h4>
         )
 
-    } else {
+    } else if (typeof data  !== 'undefined' && data.accounts != null) {
 
         const row = data.accounts.map((account, index) => {
             return (

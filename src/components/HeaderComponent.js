@@ -4,8 +4,8 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 import { baseUrl } from "../shared/baseUrl";
-import { API_TOKEN } from '../shared/localStorage';
-import { setApiToken, unsetApiToken } from '../redux/ActionCreators';
+import { setApiToken, unsetApiToken, addUserData, purgeAccounts,
+    purgeUserData, purgeTransactions } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
@@ -16,7 +16,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     setApiToken: (token) => { dispatch(setApiToken(token)) },
-    unsetApiToken: () => { dispatch(unsetApiToken()) }
+    unsetApiToken: () => { dispatch(unsetApiToken()) },
+    addUserData: (data) => { dispatch(addUserData(data)) },
+    purgeUserData: () => { dispatch(purgeUserData()) },
+    purgeAccounts: () => { dispatch(purgeAccounts()) },
+    purgeTransactions: () => { dispatch(purgeTransactions()) }
 });
 
 class Header extends Component {
@@ -69,6 +73,7 @@ class Header extends Component {
             .then(res => res.json())
             .then(json => {
                 this.props.setApiToken(json.token);
+                this.props.addUserData(json.user);
                 this.setState({
                     username: json.user.username
                 });
@@ -78,7 +83,13 @@ class Header extends Component {
 
     handleLogout() {
         this.props.unsetApiToken();
-        this.setState({ loggedIn: false, username: '' });
+        this.props.purgeUserData();
+        this.props.purgeTransactions();
+        this.props.purgeAccounts();
+        this.setState({
+            username: '',
+            loggedIn: false
+        });
     };
 
     toggleNav() {
