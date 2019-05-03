@@ -4,9 +4,9 @@ import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
 import { Transactions } from './transactions';
 import { Accounts } from './accounts';
+import { UserData } from './userData';
 import { ApiToken } from './apiToken';
 import { USERS } from '../shared/users';
-import { USER } from '../shared/user';
 import { InitialTransfer } from './forms';
 
 export const ConfigureStore = () => {
@@ -16,7 +16,7 @@ export const ConfigureStore = () => {
             users: USERS,
             transactions: Transactions,
             accounts: Accounts,
-            user: USER,
+            userData: UserData,
             ...createForms({
                 transfer: InitialTransfer
             })

@@ -4,6 +4,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import TransferFunds from './TransferFundsComponent';
 import History from './HistoryComponent';
+import Accounts from './AccountsComponent';
 
 function Main() {
 
@@ -13,6 +14,7 @@ function Main() {
             <div>
                 <Switch>
                     <Route path='/home/' component={TransferFunds} />
+                    <Route path='/accounts/' component={Accounts} />
                     <Route path='/history/' component={History} />
                     <Redirect to='/home/' />
                 </Switch>

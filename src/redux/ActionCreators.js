@@ -103,3 +103,49 @@ export const fetchAccounts = () => (dispatch) => {
         .then(accounts => dispatch(addAccounts(accounts)))
         .catch(error => dispatch(accountsFailed(error.message)));
 };
+
+export const userDataLoading = () => ({
+    type: ActionTypes.USER_DATA_LOADING
+});
+
+export const addUserData = (userData) => ({
+    type: ActionTypes.ADD_USER_DATA,
+    payload: userData
+});
+
+export const userDataFailed = (errMess) => ({
+    type: ActionTypes.USER_DATA_FAILED,
+    payload: errMess
+});
+
+export const fetchUserData = () => (dispatch) => {
+
+    dispatch(userDataLoading(true));
+
+    const token = localStorage.getItem(API_TOKEN);
+
+    let request = new Request(baseUrl + 'users/1/', {
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'JWT ' + token
+        })
+    });
+
+    return fetch(request)
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    let error = new Error('Error' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                let errMess = new Error(error.message);
+                throw errMess;
+            })
+        .then(response => response.json())
+        .then(userData => dispatch(addUserData(userData)))
+        .catch(error => dispatch(userDataFailed(error.message)));
+};

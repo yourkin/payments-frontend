@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Row, Col, Label, ModalHeader, ModalBody, Modal} from 'reactstrap';
+import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
 import { USER } from '../shared/user';
 import { fetchAccounts } from '../redux/ActionCreators';
@@ -61,7 +61,7 @@ class TransferFunds extends Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.fetchAccounts();
     }
 
