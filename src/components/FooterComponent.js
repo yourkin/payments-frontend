@@ -13,14 +13,12 @@ function Footer(props) {
                             <li><Link to="/home/">Home</Link></li>
                             <li><Link to="/accounts/">Accounts</Link></li>
                             <li><Link to="/history/">History</Link></li>
-                            <li><Link to="/contactus/">Contact Us</Link></li>
                         </ul>
                     </div>
                     <div className="col-7 col-sm-5">
                         <h5>Our Address</h5>
                         <address>
                             2 Abbey Rd, St John's Wood<br />
-                            London NW8 0AH UK<br />
                             <i className="fa fa-phone fa-lg"></i> +1 234 56 78<br />
                             <i className="fa fa-fax fa-lg"></i> +1 234 56 79<br />
                             <i className="fa fa-envelope fa-lg"></i> <a href="mailto:andrew.yourkin@gmail.com">

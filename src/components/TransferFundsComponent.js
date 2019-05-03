@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {Button, Row, Col, Label, ModalHeader, ModalBody, FormGroup, Input, Modal} from 'reactstrap';
+import {Button, Row, Col, Label, ModalHeader, ModalBody, Modal} from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
 import { USER } from '../shared/user';
-import { Loading } from './LoadingComponent';
 import { fetchAccounts } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";

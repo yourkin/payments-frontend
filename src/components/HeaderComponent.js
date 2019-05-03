@@ -157,7 +157,7 @@ class Header extends Component {
 
                         <NavbarToggler onClick={this.toggleNav} />
 
-                        <NavbarBrand className="mr-auto">
+                        <NavbarBrand className="mr-5">
                             <img src="/assets/images/pay-logo.jpg" height="75" width="75" alt="Pay Logo" />
                         </NavbarBrand>
 
@@ -171,9 +171,6 @@ class Header extends Component {
                                 </NavLink>
                                 <NavLink className="nav-link" to="/history/">
                                     <span className="fa fa-list fa-lg"> History</span>
-                                </NavLink>
-                                <NavLink className="nav-link" to="/contactus/">
-                                    <span className="fa fa-address-card fa-lg"> Contact Us</span>
                                 </NavLink>
                             </Nav>
                         </Collapse>
