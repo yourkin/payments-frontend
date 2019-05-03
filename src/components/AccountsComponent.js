@@ -40,9 +40,9 @@ function RenderTable({data, isLoading, errMess}) {
         });
 
         return (
-            <Table>
+            <Table className="my-5">
                 <thead>
-                <tr>
+                <tr className="my-5">
                     <th>#</th>
                     <th>Account</th>
                     <th>Currency</th>
