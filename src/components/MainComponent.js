@@ -13,10 +13,10 @@ function Main() {
             <Header />
             <div>
                 <Switch>
-                    <Route path='/home/' component={TransferFunds} />
                     <Route path='/accounts/' component={Accounts} />
+                    <Route path='/transfer/' component={TransferFunds} />
                     <Route path='/history/' component={History} />
-                    <Redirect to='/home/' />
+                    <Redirect to='/accounts/' />
                 </Switch>
             </div>
             <Footer />
