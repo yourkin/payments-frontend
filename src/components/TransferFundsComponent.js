@@ -160,7 +160,7 @@ class TransferFunds extends Component {
                     </div>
                 </div>
             </>
-        )
+        );
     }
 }
 
