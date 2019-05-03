@@ -59,13 +59,6 @@ function RenderTable({data, isLoading, errMess}) {
 
 class Accounts extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //
-    //     }
-    // }
-
     componentDidMount() {
         this.props.fetchUserData();
     }
