@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from 'reactstrap';
 import { connect } from "react-redux";
 import { fetchUserData } from '../redux/ActionCreators';
-import {Loading} from "./LoadingComponent";
+import { Loading } from "./LoadingComponent";
 
 const mapStateToProps = state => {
     return {
@@ -30,7 +30,7 @@ function RenderTable({data, isLoading, errMess}) {
 
         const row = data.accounts.map((account, index) => {
             return (
-                <tr>
+                <tr key={index}>
                     <th scope="row">{index+1}</th>
                     <td>{account.uuid}</td>
                     <td>{account.currency}</td>
