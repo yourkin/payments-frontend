@@ -1,6 +1,14 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
+export const toggleLoginModal = () => ({
+   type: ActionTypes.TOGGLE_LOGIN_MODAL
+});
+
+export const toggleRegisterModal = () => ({
+    type: ActionTypes.TOGGLE_REGISTER_MODAL
+});
+
 export const setAuthData = (data) => ({
     type: ActionTypes.SET_AUTH_DATA,
     payload: data

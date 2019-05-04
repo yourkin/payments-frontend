@@ -1,20 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
-import { baseUrl } from "../shared/baseUrl";
-import { setAuthData, clearAuthData, addUserData, purgeAccounts,
-    purgeUserData, purgeTransactions } from '../redux/ActionCreators';
-import { connect } from "react-redux";
+import { baseUrl } from '../shared/baseUrl';
+import { setAuthData, clearAuthData, addUserData, purgeAccounts, purgeUserData,
+    purgeTransactions, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
+import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        modals: state.modals
     }
 };
 
 const mapDispatchToProps = dispatch => ({
+    toggleLoginModal: () => { dispatch(toggleLoginModal()) },
+    toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
     setAuthData: (data) => { dispatch(setAuthData(data)) },
     clearAuthData: () => { dispatch(clearAuthData()) },
     addUserData: (data) => { dispatch(addUserData(data)) },
@@ -29,12 +32,8 @@ class Header extends Component {
         super(props);
         this.state = {
             isNavOpen: false,
-            isLoginModalOpen: false,
-            isRegisterModalOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this);
-        this.toggleLoginModal = this.toggleLoginModal.bind(this);
-        this.toggleRegisterModal = this.toggleRegisterModal.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegistration = this.handleRegistration.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
@@ -87,18 +86,6 @@ class Header extends Component {
         });
     }
 
-    toggleLoginModal() {
-        this.setState({
-            isLoginModalOpen: !this.state.isLoginModalOpen
-        });
-    }
-
-    toggleRegisterModal() {
-        this.setState({
-            isRegisterModalOpen: !this.state.isRegisterModalOpen
-        });
-    }
-
     render() {
 
         const RenderNavButtons = ({isLoggedIn, username}) => {
@@ -106,8 +93,8 @@ class Header extends Component {
             if (!isLoggedIn) {
                 return (
                     <NavItem>
-                        <Button outline onClick={this.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
-                        <Button outline onClick={this.toggleRegisterModal}><span className="fa fa-user-plus"></span> Register</Button>
+                        <Button outline onClick={this.props.toggleLoginModal}><span className="fa fa-sign-in"></span> Login</Button>{' '}
+                        <Button outline onClick={this.props.toggleRegisterModal}><span className="fa fa-user-plus"></span> Register</Button>
                     </NavItem>
                 )
             }
@@ -122,8 +109,8 @@ class Header extends Component {
         return (
             <React.Fragment>
 
-                <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
-                    <ModalHeader toggle={this.toggleLoginModal}>Login</ModalHeader>
+                <Modal isOpen={this.props.modals.isLoginOpen} toggle={this.props.toggleLoginModal}>
+                    <ModalHeader toggle={this.props.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
@@ -141,8 +128,8 @@ class Header extends Component {
                     </ModalBody>
                 </Modal>
 
-                <Modal isOpen={this.state.isRegisterModalOpen} toggle={this.toggleRegisterModal}>
-                    <ModalHeader toggle={this.toggleRegisterModal}>Register</ModalHeader>
+                <Modal isOpen={this.props.modals.isRegisterOpen} toggle={this.props.toggleRegisterModal}>
+                    <ModalHeader toggle={this.props.toggleRegisterModal}>Register</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.handleRegistration}>
                             <FormGroup>
