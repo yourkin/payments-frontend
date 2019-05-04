@@ -223,3 +223,15 @@ export const manageRegistration = (username, password) => (dispatch) => {
             dispatch(toggleRegisterModal());
         });
 };
+
+export const initLogout = () => ({
+    type: ActionTypes.LOGOUT_USER
+});
+
+export const logoutUser = () => (dispatch) => {
+    dispatch(initLogout());
+    dispatch(clearAuthData());
+    dispatch(purgeUserData());
+    dispatch(purgeTransactions());
+    dispatch(purgeAccounts());
+};

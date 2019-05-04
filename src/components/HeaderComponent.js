@@ -3,8 +3,8 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
-import { clearAuthData, purgeAccounts, purgeUserData, manageLogin, manageRegistration,
-    purgeTransactions, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
+import { manageLogin, manageRegistration,
+    logoutUser, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -21,10 +21,7 @@ const mapDispatchToProps = dispatch => ({
     toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
     manageLogin: (username, password) => { dispatch(manageLogin(username, password)) },
     manageRegistration: (username, password) => { dispatch(manageRegistration(username, password)) },
-    clearAuthData: () => { dispatch(clearAuthData()) },
-    purgeUserData: () => { dispatch(purgeUserData()) },
-    purgeAccounts: () => { dispatch(purgeAccounts()) },
-    purgeTransactions: () => { dispatch(purgeTransactions()) }
+    logoutUser: () => { dispatch(logoutUser()) }
 });
 
 class Header extends Component {
@@ -51,10 +48,7 @@ class Header extends Component {
     };
 
     handleLogout() {
-        this.props.clearAuthData();
-        this.props.purgeUserData();
-        this.props.purgeTransactions();
-        this.props.purgeAccounts();
+        this.props.logoutUser();
     };
 
     toggleNav() {

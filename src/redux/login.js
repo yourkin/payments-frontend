@@ -9,6 +9,9 @@ export const Login = (state = {loginIn: false, errMess: null}, action) => {
         case ActionTypes.LOGIN_FAILED:
             return {...state, loginIn: false, errMess: action.payload};
 
+        case ActionTypes.LOGOUT_USER:
+            return {...state, loginIn: false, errMess: action.payload};
+
         default:
             return state;
     }
