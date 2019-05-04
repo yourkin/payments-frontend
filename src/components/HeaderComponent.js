@@ -77,10 +77,10 @@ class Header extends Component {
                 )
         };
 
-        const ErrMess = () => {
-            if (this.props.login.errMess)
+        const ErrMess = ({errMess}) => {
+            if (errMess)
                 return (
-                  <div className="mb-2 text-danger">{this.props.login.errMess}</div>
+                  <div className="mb-2 text-danger">{errMess}</div>
                 );
             else
                 return null;
@@ -103,7 +103,7 @@ class Header extends Component {
                                 <Input type="password" id="password" name="password"
                                        innerRef={(input) => this.password = input}  />
                             </FormGroup>
-                            <ErrMess />
+                            <ErrMess errMess={this.props.login.errMess}/>
                             <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
                     </ModalBody>
@@ -123,6 +123,7 @@ class Header extends Component {
                                 <Input type="password" id="password" name="password"
                                        innerRef={(input) => this.password = input}  />
                             </FormGroup>
+                            <ErrMess errMess={this.props.register.errMess}/>
                             <Button type="submit" value="submit" color="primary">Register</Button>
                         </Form>
                     </ModalBody>
