@@ -4,20 +4,22 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 import { baseUrl } from '../shared/baseUrl';
-import { setAuthData, clearAuthData, addUserData, purgeAccounts, purgeUserData,
+import { setAuthData, clearAuthData, addUserData, purgeAccounts, purgeUserData, manageLogin,
     purgeTransactions, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        modals: state.modals
+        modals: state.modals,
+        login: state.login
     }
 };
 
 const mapDispatchToProps = dispatch => ({
     toggleLoginModal: () => { dispatch(toggleLoginModal()) },
     toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
+    manageLogin: (username, password) => { dispatch(manageLogin(username, password)) },
     setAuthData: (data) => { dispatch(setAuthData(data)) },
     clearAuthData: () => { dispatch(clearAuthData()) },
     addUserData: (data) => { dispatch(addUserData(data)) },
@@ -52,25 +54,13 @@ class Header extends Component {
             .then(json => {
                 this.props.setAuthData({'token': json.token, 'username': json.username, 'uuid': json.uuid});
                 this.props.addUserData(json);
-                this.toggleRegisterModal();
+                this.props.toggleRegisterModal();
             });
     };
 
     handleLogin(event) {
         event.preventDefault();
-        fetch(baseUrl + 'token-auth/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({'username': this.username.value, 'password': this.password.value})
-        })
-            .then(res => res.json())
-            .then(json => {
-                this.props.setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid});
-                this.props.addUserData(json.user);
-                this.toggleLoginModal();
-            });
+        this.props.manageLogin(this.username.value, this.password.value)
     };
 
     handleLogout() {

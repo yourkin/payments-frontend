@@ -89,7 +89,7 @@ export const purgeAccounts = () => ({
 
 export const fetchAccounts = () => (dispatch, getState) => {
 
-    dispatch(accountsLoading(true));
+    dispatch(accountsLoading());
 
     const token = getState().auth.apiToken;
 
@@ -139,7 +139,7 @@ export const purgeUserData = () => ({
 
 export const fetchUserData = () => (dispatch, getState) => {
 
-    dispatch(userDataLoading(true));
+    dispatch(userDataLoading());
 
     const token = getState().auth.apiToken;
 
@@ -166,4 +166,32 @@ export const fetchUserData = () => (dispatch, getState) => {
         .then(response => response.json())
         .then(userData => dispatch(addUserData(userData)))
         .catch(error => dispatch(userDataFailed(error.message)));
+};
+
+export const startLogin = () => ({
+    type: ActionTypes.LOGIN_STARTED
+});
+
+export const loginFailed = (errMess) => ({
+    type: ActionTypes.LOGIN_FAILED,
+    payload: errMess
+});
+
+export const manageLogin = (username, password) => (dispatch) => {
+
+    dispatch(startLogin());
+
+    fetch(baseUrl + 'token-auth/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'username': username, 'password': password})
+    })
+        .then(res => res.json())
+        .then(json => {
+            dispatch(setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid}));
+            dispatch(addUserData(json.user));
+            dispatch(toggleLoginModal());
+        });
 };
