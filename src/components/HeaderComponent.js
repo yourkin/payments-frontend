@@ -77,6 +77,15 @@ class Header extends Component {
                 )
         };
 
+        const ErrMess = () => {
+            if (this.props.login.errMess)
+                return (
+                  <div className="mb-2 text-danger">{this.props.login.errMess}</div>
+                );
+            else
+                return null;
+        };
+
         return (
             <React.Fragment>
 
@@ -94,6 +103,7 @@ class Header extends Component {
                                 <Input type="password" id="password" name="password"
                                        innerRef={(input) => this.password = input}  />
                             </FormGroup>
+                            <ErrMess />
                             <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
                     </ModalBody>
