@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
-import { fetchAccounts } from '../redux/ActionCreators';
+import {fetchAccounts, transferFunds, toggleResultModal } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 
 const mapStateToProps = state => {
     return {
         accounts: state.accounts,
-        auth: state.auth
+        transfer: state.transfer,
+        auth: state.auth,
+        modals: state.modals
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    fetchAccounts: () => { dispatch(fetchAccounts()) }
+    fetchAccounts: () => { dispatch(fetchAccounts()) },
+    transferFunds: (sender, receiver, amount) => { dispatch(transferFunds(sender, receiver, amount)) },
+    toggleResultModal: () => { dispatch(toggleResultModal()) },
+
 });
 
 const required = (val) => val && val.length;
@@ -46,18 +51,7 @@ class TransferFunds extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isResultModalOpen: false,
-            transferRes: null
-        };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.toggleResultModal = this.toggleResultModal.bind(this);
-    }
-
-    toggleResultModal() {
-        this.setState({
-            isResultModalOpen: !this.state.isResultModalOpen
-        });
     }
 
     componentDidMount() {
@@ -65,24 +59,7 @@ class TransferFunds extends Component {
     }
 
     handleSubmit(values) {
-        const body = JSON.stringify({
-            'sender_account': values.sender,
-            'receiver_account': values.receiver,
-            'sent_amount': values.amount
-        });
-        fetch(baseUrl + 'transactions/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + this.props.auth.apiToken
-            },
-            body: body
-        })
-            .then(res => res.json())
-            .then(json => {
-                this.setState({transferRes: json});
-                this.toggleResultModal();
-            });
+        this.props.transferFunds(values.sender, values.receiver, values.amount);
     }
 
     render () {
@@ -101,11 +78,11 @@ class TransferFunds extends Component {
 
         return (
             <>
-                <Modal isOpen={this.state.isResultModalOpen} toggle={this.toggleResultModal}>
-                    <ModalHeader toggle={this.toggleResultModal}>Transaction Details</ModalHeader>
+                <Modal isOpen={this.props.modals.isResultOpen} toggle={this.props.toggleResultModal}>
+                    <ModalHeader toggle={this.props.toggleResultModal}>Transaction Details</ModalHeader>
                     <ModalBody>
-                        <TransferResults results={this.state.transferRes} />
-                        <Button onClick={this.toggleResultModal} color="info">OK</Button>
+                        <TransferResults results={this.props.transfer.result} />
+                        <Button onClick={this.props.toggleResultModal} color="info">OK</Button>
                     </ModalBody>
                 </Modal>
 
@@ -115,7 +92,7 @@ class TransferFunds extends Component {
                             <h4>Transfer Funds</h4>
                         </div>
                         <div className="col-12 col-md-9">
-                            <Form model="transfer" onSubmit={(values) => this.handleSubmit(values)}>
+                            <Form model="transferForm" onSubmit={(values) => this.handleSubmit(values)}>
                                 <Row className="form-group">
                                     <Label htmlFor="sender" md={2}>From account:</Label>
                                     <Col md={4}>

@@ -9,6 +9,10 @@ export const toggleRegisterModal = () => ({
     type: ActionTypes.TOGGLE_REGISTER_MODAL
 });
 
+export const toggleResultModal = () => ({
+    type: ActionTypes.TOGGLE_RESULT_MODAL
+});
+
 export const setAuthData = (data) => ({
     type: ActionTypes.SET_AUTH_DATA,
     payload: data
@@ -234,4 +238,43 @@ export const logoutUser = () => (dispatch) => {
     dispatch(purgeUserData());
     dispatch(purgeTransactions());
     dispatch(purgeAccounts());
+};
+
+export const initTransfer = () => ({
+    type: ActionTypes.TRANSFER_FUNDS
+});
+
+export const transferResult = (result) => ({
+    type: ActionTypes.TRANSFER_RESULT,
+    payload: result
+});
+
+export const transferFailed = (errMess) => ({
+    type: ActionTypes.TRANSFER_FAILED,
+    payload: errMess
+});
+
+export const transferFunds = (sender, receiver, amount) => (dispatch, getState) => {
+
+    dispatch(initTransfer());
+
+    const token = getState().auth.apiToken;
+
+    fetch(baseUrl + 'transactions/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'JWT ' + token
+        },
+        body: JSON.stringify({
+            'sender_account': sender,
+            'receiver_account': receiver,
+            'sent_amount': amount
+        })
+    })
+        .then(res => res.json())
+        .then(json => {
+            dispatch(transferResult(json));
+            dispatch(toggleResultModal());
+        });
 };

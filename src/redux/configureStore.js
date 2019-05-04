@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
 import { Transactions } from './transactions';
+import { Transfer } from './transfer';
 import { Accounts } from './accounts';
 import { UserData } from './userData';
 import { Auth } from './auth';
@@ -18,11 +19,12 @@ export const ConfigureStore = () => {
             login: Login,
             register: Register,
             transactions: Transactions,
+            transfer: Transfer,
             accounts: Accounts,
             userData: UserData,
             modals: Modals,
             ...createForms({
-                transfer: InitialTransfer
+                transferForm: InitialTransfer
             })
         }),
         applyMiddleware(thunk, logger)
