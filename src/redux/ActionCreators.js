@@ -168,7 +168,7 @@ export const fetchUserData = () => (dispatch, getState) => {
         .catch(error => dispatch(userDataFailed(error.message)));
 };
 
-export const startLogin = () => ({
+export const initLogin = () => ({
     type: ActionTypes.LOGIN_STARTED
 });
 
@@ -177,9 +177,18 @@ export const loginFailed = (errMess) => ({
     payload: errMess
 });
 
+export const initRegistration = () => ({
+    type: ActionTypes.REGISTRATION_STARTED
+});
+
+export const registrationFailed = (errMess) => ({
+    type: ActionTypes.REGISTRATION_FAILED,
+    payload: errMess
+});
+
 export const manageLogin = (username, password) => (dispatch) => {
 
-    dispatch(startLogin());
+    dispatch(initLogin());
 
     fetch(baseUrl + 'token-auth/', {
         method: 'POST',
@@ -193,5 +202,24 @@ export const manageLogin = (username, password) => (dispatch) => {
             dispatch(setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid}));
             dispatch(addUserData(json.user));
             dispatch(toggleLoginModal());
+        });
+};
+
+export const manageRegistration = (username, password) => (dispatch) => {
+
+    dispatch(initRegistration());
+
+    fetch(baseUrl + 'core/users/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'username': username, 'password': password})
+    })
+        .then(res => res.json())
+        .then(json => {
+            dispatch(setAuthData({'token': json.token, 'username': json.username, 'uuid': json.uuid}));
+            dispatch(addUserData(json));
+            dispatch(toggleRegisterModal());
         });
 };

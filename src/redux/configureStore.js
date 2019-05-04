@@ -7,6 +7,7 @@ import { Accounts } from './accounts';
 import { UserData } from './userData';
 import { Auth } from './auth';
 import { Login } from './login';
+import { Register } from './register';
 import { Modals } from './modals';
 import { InitialTransfer } from './forms';
 
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
         combineReducers({
             auth: Auth,
             login: Login,
+            register: Register,
             transactions: Transactions,
             accounts: Accounts,
             userData: UserData,
