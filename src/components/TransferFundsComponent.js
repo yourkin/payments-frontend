@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
-import {fetchAccounts, transferFunds, toggleResultModal } from '../redux/ActionCreators';
+import { fetchAccounts, transferFunds, toggleResultModal } from '../redux/ActionCreators';
 import { connect } from "react-redux";
-import { baseUrl } from "../shared/baseUrl";
 
 const mapStateToProps = state => {
     return {
@@ -49,17 +48,8 @@ function TransferResults({results}) {
 
 class TransferFunds extends Component {
 
-    constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
     componentDidMount() {
         this.props.fetchAccounts();
-    }
-
-    handleSubmit(values) {
-        this.props.transferFunds(values.sender, values.receiver, values.amount);
     }
 
     render () {
@@ -92,7 +82,7 @@ class TransferFunds extends Component {
                             <h4>Transfer Funds</h4>
                         </div>
                         <div className="col-12 col-md-9">
-                            <Form model="transferForm" onSubmit={(values) => this.handleSubmit(values)}>
+                            <Form model="transferForm" onSubmit={(values) => this.props.transferFunds(values.sender, values.receiver, values.amount)}>
                                 <Row className="form-group">
                                     <Label htmlFor="sender" md={2}>From account:</Label>
                                     <Col md={4}>
