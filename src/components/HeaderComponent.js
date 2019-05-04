@@ -4,19 +4,19 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 import { baseUrl } from "../shared/baseUrl";
-import { setApiToken, unsetApiToken, addUserData, purgeAccounts,
+import { setAuthData, clearAuthData, addUserData, purgeAccounts,
     purgeUserData, purgeTransactions } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
     return {
-        apiToken: state.apiToken
+        auth: state.auth
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    setApiToken: (token) => { dispatch(setApiToken(token)) },
-    unsetApiToken: () => { dispatch(unsetApiToken()) },
+    setAuthData: (data) => { dispatch(setAuthData(data)) },
+    clearAuthData: () => { dispatch(clearAuthData()) },
     addUserData: (data) => { dispatch(addUserData(data)) },
     purgeUserData: () => { dispatch(purgeUserData()) },
     purgeAccounts: () => { dispatch(purgeAccounts()) },
@@ -30,9 +30,7 @@ class Header extends Component {
         this.state = {
             isNavOpen: false,
             isLoginModalOpen: false,
-            isRegisterModalOpen: false,
-            loggedIn: !!this.props.apiToken,
-            username: localStorage.getItem('username')
+            isRegisterModalOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
@@ -53,10 +51,8 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                this.props.setApiToken(json.token);
-                this.setState({
-                    username: json.username
-                });
+                this.props.setAuthData({'token': json.token, 'username': json.username, 'uuid': json.uuid});
+                this.props.addUserData(json);
                 this.toggleRegisterModal();
             });
     };
@@ -72,24 +68,17 @@ class Header extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                this.props.setApiToken(json.token);
+                this.props.setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid});
                 this.props.addUserData(json.user);
-                this.setState({
-                    username: json.user.username
-                });
                 this.toggleLoginModal();
             });
     };
 
     handleLogout() {
-        this.props.unsetApiToken();
+        this.props.clearAuthData();
         this.props.purgeUserData();
         this.props.purgeTransactions();
         this.props.purgeAccounts();
-        this.setState({
-            username: '',
-            loggedIn: false
-        });
     };
 
     toggleNav() {
@@ -112,7 +101,7 @@ class Header extends Component {
 
     render() {
 
-        const RenderNavButtons = ({isLoggedIn}) => {
+        const RenderNavButtons = ({isLoggedIn, username}) => {
 
             if (!isLoggedIn) {
                 return (
@@ -125,7 +114,7 @@ class Header extends Component {
             else
                 return (
                     <NavItem>
-                        <Button outline onClick={this.handleLogout}><span className="fa fa-sign-in"></span> Logout {this.state.username}</Button>
+                        <Button outline onClick={this.handleLogout}><span className="fa fa-sign-in"></span> Logout {username}</Button>
                     </NavItem>
                 )
         };
@@ -195,7 +184,7 @@ class Header extends Component {
                         </Collapse>
 
                         <Nav className="ml-auto" navbar>
-                            <RenderNavButtons isLoggedIn={this.state.loggedIn} />
+                            <RenderNavButtons isLoggedIn={this.props.auth.isLoggedIn} username={this.props.auth.username}/>
                         </Nav>
 
                     </div>

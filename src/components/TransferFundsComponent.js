@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
-import { USER } from '../shared/user';
 import { fetchAccounts } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
-import { API_TOKEN } from "../shared/localStorage";
 
 const mapStateToProps = state => {
     return {
-        accounts: state.accounts
+        accounts: state.accounts,
+        auth: state.auth
     }
 };
 
@@ -19,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
 
 const required = (val) => val && val.length;
 
-function TransferResults({results}){
+function TransferResults({results}) {
     if (!results) {
         return (
             <div>No data</div>
@@ -66,7 +65,6 @@ class TransferFunds extends Component {
     }
 
     handleSubmit(values) {
-        const token = localStorage.getItem(API_TOKEN);
         const body = JSON.stringify({
             'sender_account': values.sender,
             'receiver_account': values.receiver,
@@ -76,7 +74,7 @@ class TransferFunds extends Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token
+                'Authorization': 'JWT ' + this.props.auth.apiToken
             },
             body: body
         })
@@ -89,10 +87,10 @@ class TransferFunds extends Component {
 
     render () {
 
-        const ownAccounts = USER.accounts.map((account) => {
+        const ownAccounts = this.props.accounts.accounts.filter((account) => account.client === 'andrew').map((account) => {
             return (
                 <option key={account.uuid} value={account.uuid}>{account.currency} (available: {account.balance})</option>
-            )
+            );
         });
 
         const otherAccounts = this.props.accounts.accounts.map((account) => {

@@ -5,13 +5,13 @@ import { createForms } from 'react-redux-form';
 import { Transactions } from './transactions';
 import { Accounts } from './accounts';
 import { UserData } from './userData';
-import { ApiToken } from './apiToken';
+import { Auth } from './auth';
 import { InitialTransfer } from './forms';
 
 export const ConfigureStore = () => {
-    const store = createStore(
+    return createStore(
         combineReducers({
-            apiToken: ApiToken,
+            auth: Auth,
             transactions: Transactions,
             accounts: Accounts,
             userData: UserData,
@@ -21,7 +21,4 @@ export const ConfigureStore = () => {
         }),
         applyMiddleware(thunk, logger)
     );
-
-    return store;
 };
-

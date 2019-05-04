@@ -1,15 +1,14 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
-import { API_TOKEN } from '../shared/localStorage';
 
-export const setApiToken = (value) => ({
-    type: ActionTypes.SET_API_TOKEN,
-    payload: value
+export const setAuthData = (data) => ({
+    type: ActionTypes.SET_AUTH_DATA,
+    payload: data
 });
 
-export const unsetApiToken = (value) => ({
-    type: ActionTypes.UNSET_API_TOKEN,
-    payload: value
+export const clearAuthData = (data) => ({
+    type: ActionTypes.CLEAR_AUTH_DATA,
+    payload: data
 });
 
 export const transactionsLoading = () => ({
@@ -30,11 +29,11 @@ export const purgeTransactions = () => ({
     type: ActionTypes.PURGE_TRANSACTIONS
 });
 
-export const fetchTransactions = () => (dispatch) => {
+export const fetchTransactions = () => (dispatch, getState) => {
 
     dispatch(transactionsLoading(true));
 
-    const token = localStorage.getItem(API_TOKEN);
+    const token = getState().auth.apiToken;
 
     let request = new Request(baseUrl + 'transactions/', {
         headers: new Headers({
@@ -80,11 +79,11 @@ export const purgeAccounts = () => ({
     type: ActionTypes.PURGE_ACCOUNTS
 });
 
-export const fetchAccounts = () => (dispatch) => {
+export const fetchAccounts = () => (dispatch, getState) => {
 
     dispatch(accountsLoading(true));
 
-    const token = localStorage.getItem(API_TOKEN);
+    const token = getState().auth.apiToken;
 
     let request = new Request(baseUrl + 'accounts/', {
         headers: new Headers({
@@ -130,13 +129,13 @@ export const purgeUserData = () => ({
     type: ActionTypes.PURGE_USER_DATA
 });
 
-export const fetchUserData = () => (dispatch) => {
+export const fetchUserData = () => (dispatch, getState) => {
 
     dispatch(userDataLoading(true));
 
-    const token = localStorage.getItem(API_TOKEN);
+    const token = getState().auth.apiToken;
 
-    let request = new Request(baseUrl + 'users/1/', {
+    let request = new Request(baseUrl + 'core/current_user/', {
         headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'JWT ' + token
@@ -154,8 +153,7 @@ export const fetchUserData = () => (dispatch) => {
                 }
             },
             error => {
-                let errMess = new Error(error.message);
-                throw errMess;
+                throw new Error(error.message);
             })
         .then(response => response.json())
         .then(userData => dispatch(addUserData(userData)))

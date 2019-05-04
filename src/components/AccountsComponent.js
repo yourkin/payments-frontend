@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component }  from 'react';
 import { Table } from 'reactstrap';
+import { Loading } from "./LoadingComponent";
 import { connect } from "react-redux";
 import { fetchUserData } from '../redux/ActionCreators';
-import { Loading } from "./LoadingComponent";
 
 const mapStateToProps = state => {
     return {
-        userData: state.userData
+        userData: state.userData,
+        auth: state.auth
     }
 };
 
@@ -14,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
     fetchUserData: () => { dispatch(fetchUserData()) }
 });
 
-function RenderTable({data, isLoading, errMess}) {
+function RenderTable({userData, isLoading, errMess}) {
 
     if (isLoading) {
         return (
@@ -26,9 +27,8 @@ function RenderTable({data, isLoading, errMess}) {
             <h4>{errMess}</h4>
         )
 
-    } else if (typeof data  !== 'undefined' && data.accounts != null) {
-
-        const row = data.accounts.map((account, index) => {
+    } else {
+        const row = userData.accounts.map((account, index) => {
             return (
                 <tr key={index}>
                     <th scope="row">{index+1}</th>
@@ -60,19 +60,19 @@ function RenderTable({data, isLoading, errMess}) {
 class Accounts extends Component {
 
     componentDidMount() {
-        this.props.fetchUserData();
+        this.props.fetchUserData(this.props.auth.uuid);
     }
 
-    render() {
+    render () {
         return (
             <div className="container">
                 <RenderTable
-                    data={this.props.userData.userData}
+                    userData={this.props.userData.userData}
                     isLoading={this.props.userData.isLoading}
                     errMess={this.props.userData.errMess}
                 />
             </div>
-        )
+        );
     }
 }
 
