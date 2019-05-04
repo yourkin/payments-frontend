@@ -200,32 +200,51 @@ export const manageLogin = (username, password) => (dispatch) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({'username': username, 'password': password})
-    })
-        .then(res => res.json())
-        .then(json => {
-            dispatch(setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid}));
-            dispatch(addUserData(json.user));
-            dispatch(toggleLoginModal());
-        });
+    }).then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                let error = new Error('Error' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            throw new Error(error.message);
+        }).then(response => response.json()).then(json => {
+        dispatch(setAuthData({'token': json.token, 'username': json.user.username, 'uuid': json.user.uuid}));
+        dispatch(addUserData(json.user));
+        dispatch(toggleLoginModal());
+    }).catch(error => dispatch(loginFailed(error.message)));
 };
+
 
 export const manageRegistration = (username, password) => (dispatch) => {
 
     dispatch(initRegistration());
 
-    fetch(baseUrl + 'core/users/', {
+    return fetch(baseUrl + 'core/users/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({'username': username, 'password': password})
-    })
-        .then(res => res.json())
-        .then(json => {
-            dispatch(setAuthData({'token': json.token, 'username': json.username, 'uuid': json.uuid}));
-            dispatch(addUserData(json));
-            dispatch(toggleRegisterModal());
-        });
+    }).then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                let error = new Error('Error' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            throw new Error(error.message);
+        }).then(response => response.json()).then(user => {
+        dispatch(setAuthData({'token': user.token, 'username': user.username, 'uuid': user.uuid}));
+        dispatch(addUserData(user));
+        dispatch(toggleRegisterModal());
+    }).catch(error => dispatch(registrationFailed(error.message)));
 };
 
 export const initLogout = () => ({
@@ -260,7 +279,7 @@ export const transferFunds = (sender, receiver, amount) => (dispatch, getState) 
 
     const token = getState().auth.apiToken;
 
-    fetch(baseUrl + 'transactions/', {
+    return fetch(baseUrl + 'transactions/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -271,10 +290,20 @@ export const transferFunds = (sender, receiver, amount) => (dispatch, getState) 
             'receiver_account': receiver,
             'sent_amount': amount
         })
-    })
-        .then(res => res.json())
-        .then(json => {
-            dispatch(transferResult(json));
+    }).then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    let error = new Error('Error' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw new Error(error.message);
+            }).then(response => response.json()).then(result => {
+            dispatch(transferResult(result));
             dispatch(toggleResultModal());
-        });
+        }).catch(error => dispatch(transferFailed(error.message)));
+
 };
