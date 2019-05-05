@@ -1,5 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import * as urlPath from '../shared/urlPaths';
 
 export const toggleLoginModal = () => ({
    type: ActionTypes.TOGGLE_LOGIN_MODAL
@@ -43,7 +44,7 @@ export const fetchTransactions = () => (dispatch, getState) => {
 
     const token = getState().auth.apiToken;
 
-    let request = new Request(baseUrl + 'transactions/', {
+    let request = new Request(baseUrl + urlPath.transactions, {
         headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'JWT ' + token
@@ -89,7 +90,7 @@ export const fetchAccounts = () => (dispatch, getState) => {
 
     const token = getState().auth.apiToken;
 
-    let request = new Request(baseUrl + 'accounts/', {
+    let request = new Request(baseUrl + urlPath.accounts, {
         headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'JWT ' + token
@@ -135,7 +136,7 @@ export const fetchUserData = () => (dispatch, getState) => {
 
     const token = getState().auth.apiToken;
 
-    let request = new Request(baseUrl + 'core/current_user/', {
+    let request = new Request(baseUrl + urlPath.currentUser, {
         headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'JWT ' + token
@@ -182,7 +183,7 @@ export const handleLogin = (username, password) => (dispatch) => {
 
     dispatch(initLogin());
 
-    fetch(baseUrl + 'token-auth/', {
+    fetch(baseUrl + urlPath.tokenAuth, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -211,7 +212,7 @@ export const handleRegistration = (username, password) => (dispatch) => {
 
     dispatch(initRegistration());
 
-    return fetch(baseUrl + 'core/users/', {
+    return fetch(baseUrl + urlPath.users, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -264,7 +265,7 @@ export const transferFunds = (sender, receiver, amount) => (dispatch, getState) 
 
     const token = getState().auth.apiToken;
 
-    return fetch(baseUrl + 'transactions/', {
+    return fetch(baseUrl + urlPath.transfer, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
