@@ -1,7 +1,8 @@
 import React, { Component }  from 'react';
 import { Table } from 'reactstrap';
-import { Loading } from "./LoadingComponent";
-import { connect } from "react-redux";
+import { Loading } from './LoadingComponent';
+import { ErrorDisplay } from './ErrorDisplayComponent';
+import { connect } from 'react-redux';
 import { fetchUserData } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
@@ -24,7 +25,7 @@ function RenderTable({userData, isLoading, errMess}) {
     }
     else if (errMess) {
         return (
-            <h4>{errMess}</h4>
+            <ErrorDisplay errMess={errMess} />
         )
 
     } else {

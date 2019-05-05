@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import { Loading } from './LoadingComponent';
+import { ErrorDisplay } from './ErrorDisplayComponent';
 import { fetchTransactions } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 
@@ -75,7 +76,7 @@ function RenderHistory({data, isLoading, errMess}) {
     }
     else if (errMess) {
         return (
-            <h4>{errMess}</h4>
+            <ErrorDisplay errMess={errMess} />
         )
     }
     else
