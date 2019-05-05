@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { Control, Form, Errors } from 'react-redux-form';
 import { fetchAccounts, transferFunds, toggleResultModal } from '../redux/ActionCreators';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
@@ -25,7 +25,7 @@ const required = (val) => val && val.length;
 function TransferResults({results}) {
     if (!results) {
         return (
-            <div>No data</div>
+            <div className="text-danger">No data</div>
         )
     } else {
         return (
@@ -63,8 +63,17 @@ class TransferFunds extends Component {
         const otherAccounts = this.props.accounts.accounts.map((account) => {
             return (
                 <option key={account.uuid} value={account.uuid}>{account.client} ({account.currency})</option>
-            )
+            );
         });
+
+        const ErrMess = ({errMess}) => {
+            if (errMess)
+                return (
+                    <div className="text-danger offset-2 pb-3">{errMess}</div>
+                );
+            else
+                return null
+        };
 
         return (
             <>
@@ -113,6 +122,7 @@ class TransferFunds extends Component {
                                                 show="touched" messages={{required: 'Required'}}/>
                                     </Col>
                                 </Row>
+                                <ErrMess errMess={this.props.transfer.errMess} />
                                 <Row className="form-group">
                                     <Col md={{size:12, offset: 2}}>
                                         <Button type="submit" color="primary">
