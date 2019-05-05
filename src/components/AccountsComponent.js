@@ -25,9 +25,12 @@ function RenderTable({userData, isLoading, errMess}) {
     }
     else if (errMess) {
         return (
-            <ErrorDisplay errMess={errMess} />
-        )
-
+            <ErrorDisplay errMess={errMess}/>
+        );
+    } else if (typeof userData === 'undefined' || userData.length === 0) {
+        return (
+          <div>No data</div>
+        );
     } else {
         const row = userData.accounts.map((account, index) => {
             return (
