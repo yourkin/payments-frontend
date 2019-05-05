@@ -22,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const required = (val) => val && val.length;
+const isPositive = (val) => val && val > 0;
 
 function TransferResults({results}) {
     if (!results) {
@@ -106,7 +107,7 @@ class TransferFunds extends Component {
                                             <option value="" disabled>-------------------------------</option>
                                             {ownAccounts}
                                         </Control.select>
-                                        <Errors className="text-danger" model=".amount" show="touched"
+                                        <Errors className="text-danger" model=".sender" show="touched"
                                                 messages={{required: 'Required'}}/>
                                     </Col>
                                 </Row>
@@ -127,9 +128,12 @@ class TransferFunds extends Component {
                                     <Col md={4}>
                                         <Control.text model=".amount" id="amount"
                                                       name="amount" type="number" step="any"
-                                                      className="form-control"  validators={{required}}/>
+                                                      className="form-control"  validators={{required, isPositive}}/>
                                         <Errors className="text-danger" model=".amount"
-                                                show="touched" messages={{required: 'Required'}}/>
+                                                show="touched" messages={{
+                                                    required: 'Required ',
+                                                    isPositive: 'Amount must be a positive number '
+                                                }}/>
                                     </Col>
                                 </Row>
                                 <ErrMess errMess={this.props.transfer.errMess} />
