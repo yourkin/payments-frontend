@@ -3,7 +3,7 @@ import {
     Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
-import { handleLogin, handleRegistration, logoutUser,
+import { handleLogin, handleRegistration, handleLogout,
     toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import { Errors, Control, Form } from 'react-redux-form';
@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => ({
     toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
     handleLogin: (username, password) => { dispatch(handleLogin(username, password)) },
     handleRegistration: (username, password) => { dispatch(handleRegistration(username, password)) },
-    logoutUser: () => { dispatch(logoutUser()) }
+    handleLogout: () => { dispatch(handleLogout()) }
 });
 
 const required = (val) => val && val.length;
@@ -37,12 +37,7 @@ class Header extends Component {
             isNavOpen: false,
         };
         this.toggleNav = this.toggleNav.bind(this);
-        this.handleLogout = this.handleLogout.bind(this);
     }
-
-    handleLogout() {
-        this.props.logoutUser();
-    };
 
     toggleNav() {
         this.setState({
@@ -65,7 +60,7 @@ class Header extends Component {
             else
                 return (
                     <NavItem>
-                        <Button outline onClick={this.handleLogout}><span className="fa fa-sign-in"></span> Logout {username}</Button>
+                        <Button outline onClick={this.props.handleLogout}><span className="fa fa-sign-in"></span> Logout {username}</Button>
                     </NavItem>
                 )
         };

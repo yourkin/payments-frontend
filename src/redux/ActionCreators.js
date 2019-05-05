@@ -251,7 +251,7 @@ export const initLogout = () => ({
     type: ActionTypes.LOGOUT_USER
 });
 
-export const logoutUser = () => (dispatch) => {
+export const handleLogout = () => (dispatch) => {
     dispatch(initLogout());
     dispatch(clearAuthData());
     dispatch(purgeUserData());
