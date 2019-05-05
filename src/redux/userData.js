@@ -12,9 +12,6 @@ export const UserData = (state = {isLoading: true, errMess: null, userData: []},
         case ActionTypes.USER_DATA_FAILED:
             return {...state, isLoading: false, errMess: action.payload};
 
-        case ActionTypes.PURGE_USER_DATA:
-            return {...state, isLoading: false, errMess: null, userData: []};
-
         default:
             return state;
     }

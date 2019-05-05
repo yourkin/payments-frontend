@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const Transfer = (state = {isLoading: true, errMess: null, result: []}, action) => {
+export const Transfer = (state = {isLoading: false, errMess: null, result: []}, action) => {
     switch (action.type) {
         case ActionTypes.TRANSFER_FUNDS:
             return {...state, isLoading: true, errMess: null, result: []};

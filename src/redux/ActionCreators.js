@@ -37,10 +37,6 @@ export const transactionsFailed = (errMess) => ({
    payload: errMess
 });
 
-export const purgeTransactions = () => ({
-    type: ActionTypes.PURGE_TRANSACTIONS
-});
-
 export const fetchTransactions = () => (dispatch, getState) => {
 
     dispatch(transactionsLoading(true));
@@ -87,10 +83,6 @@ export const accountsFailed = (errMess) => ({
     payload: errMess
 });
 
-export const purgeAccounts = () => ({
-    type: ActionTypes.PURGE_ACCOUNTS
-});
-
 export const fetchAccounts = () => (dispatch, getState) => {
 
     dispatch(accountsLoading());
@@ -135,10 +127,6 @@ export const addUserData = (userData) => ({
 export const userDataFailed = (errMess) => ({
     type: ActionTypes.USER_DATA_FAILED,
     payload: errMess
-});
-
-export const purgeUserData = () => ({
-    type: ActionTypes.PURGE_USER_DATA
 });
 
 export const fetchUserData = () => (dispatch, getState) => {
@@ -254,9 +242,6 @@ export const initLogout = () => ({
 export const handleLogout = () => (dispatch) => {
     dispatch(initLogout());
     dispatch(clearAuthData());
-    dispatch(purgeUserData());
-    dispatch(purgeTransactions());
-    dispatch(purgeAccounts());
 };
 
 export const initTransfer = () => ({

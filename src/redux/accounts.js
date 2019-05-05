@@ -11,9 +11,6 @@ export const Accounts = (state = {isLoading: true, errMess: null, accounts: []},
         case ActionTypes.ACCOUNTS_FAILED:
             return {...state, isLoading: false, errMess: action.payload};
 
-        case ActionTypes.PURGE_ACCOUNTS:
-            return {...state, isLoading: false, errMess: null, accounts: []};
-
         default:
             return state;
     }
