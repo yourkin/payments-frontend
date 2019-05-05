@@ -133,7 +133,7 @@ class Header extends Component {
                     </ModalBody>
                 </Modal>
 
-                <Navbar dark expand="md">
+                <Navbar expand="md" dark>
                     <div className="container">
 
                         <NavbarToggler onClick={this.toggleNav} />
