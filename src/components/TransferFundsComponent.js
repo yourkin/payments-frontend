@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Label, ModalHeader, ModalBody, Modal } from 'reactstrap';
-import { Control, Form, Errors } from 'react-redux-form';
+import { Control, Form, Errors, actions } from 'react-redux-form';
 import { fetchAccounts, transferFunds, toggleResultModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
@@ -17,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
     fetchAccounts: () => { dispatch(fetchAccounts()) },
     transferFunds: (sender, receiver, amount) => { dispatch(transferFunds(sender, receiver, amount)) },
     toggleResultModal: () => { dispatch(toggleResultModal()) },
+    resetTransferForm: () => { dispatch(actions.reset('transferForm'))}
 
 });
 
@@ -50,6 +51,11 @@ class TransferFunds extends Component {
 
     componentDidMount() {
         this.props.fetchAccounts();
+    }
+
+    handleSubmit(values) {
+        this.props.transferFunds(values.sender, values.receiver, values.amount);
+        this.props.resetTransferForm();
     }
 
     render () {
@@ -91,32 +97,36 @@ class TransferFunds extends Component {
                             <h4>Transfer Funds</h4>
                         </div>
                         <div className="col-12 col-md-9">
-                            <Form model="transferForm" onSubmit={(values) => this.props.transferFunds(values.sender, values.receiver, values.amount)}>
+                            <Form model="transferForm" onSubmit={(values) => this.handleSubmit(values)}>
                                 <Row className="form-group">
                                     <Label htmlFor="sender" md={2}>From account:</Label>
                                     <Col md={4}>
                                         <Control.select className="form-control" model=".sender" id="sender"
-                                                        defaultValue="" name="sender">
+                                                        defaultValue="" name="sender" validators={{required}}>
                                             <option value="" disabled>-------------------------------</option>
                                             {ownAccounts}
                                         </Control.select>
+                                        <Errors className="text-danger" model=".amount" show="touched"
+                                                messages={{required: 'Required'}}/>
                                     </Col>
                                 </Row>
                                 <Row className="form-group">
                                     <Label htmlFor="receiver" md={2}>To account:</Label>
                                     <Col md={4}>
-                                        <Control.select className="form-control" defaultValue=""
+                                        <Control.select className="form-control" defaultValue="" validators={{required}}
                                                         model=".receiver" id="receiver" name="receiver">
                                             <option value="" disabled>-------------------------------</option>
                                             {otherAccounts}
                                         </Control.select>
+                                        <Errors className="text-danger" model=".receiver" show="touched"
+                                                messages={{required: 'Required'}}/>
                                     </Col>
                                 </Row>
                                 <Row className="form-group">
                                     <Label htmlFor="amount" md={2}>Amount:</Label>
                                     <Col md={4}>
                                         <Control.text model=".amount" id="amount"
-                                                      name="amount" type="number"
+                                                      name="amount" type="number" step="any"
                                                       className="form-control"  validators={{required}}/>
                                         <Errors className="text-danger" model=".amount"
                                                 show="touched" messages={{required: 'Required'}}/>
