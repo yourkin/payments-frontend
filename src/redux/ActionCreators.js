@@ -190,7 +190,7 @@ export const registrationFailed = (errMess) => ({
     payload: errMess
 });
 
-export const manageLogin = (username, password) => (dispatch) => {
+export const handleLogin = (username, password) => (dispatch) => {
 
     dispatch(initLogin());
 

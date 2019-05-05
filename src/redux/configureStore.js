@@ -10,7 +10,7 @@ import { Auth } from './auth';
 import { Login } from './login';
 import { Register } from './register';
 import { Modals } from './modals';
-import { InitialTransfer } from './forms';
+import { InitialTransfer, InitialLogin } from './forms';
 
 export const ConfigureStore = () => {
     return createStore(
@@ -24,7 +24,8 @@ export const ConfigureStore = () => {
             userData: UserData,
             modals: Modals,
             ...createForms({
-                transferForm: InitialTransfer
+                transferForm: InitialTransfer,
+                loginForm: InitialLogin
             })
         }),
         applyMiddleware(thunk, logger)

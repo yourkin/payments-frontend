@@ -29,7 +29,7 @@ class Main extends Component {
                 <div className="card mb-5 mt-2">
                     <div className="card-body my-5 pb-3">
                         Please <Link to="#" onClick={this.props.toggleLoginModal}>login</Link> or <Link
-                        to="#" onClick={this.props.toggleRegisterModal}>register</Link> to use our service
+                        to="#" onClick={this.props.toggleRegisterModal}>register</Link> to use the service
                     </div>
                 </div>
             )

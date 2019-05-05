@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
-    Button, Modal, ModalHeader, ModalBody,
-    Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+    Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
+    Button, Modal, ModalHeader, ModalBody, FormGroup, Input, Label, Col, Row } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
-import { manageLogin, manageRegistration,
+import { handleLogin, manageRegistration,
     logoutUser, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
+import { Errors, Control, Form } from 'react-redux-form';
 
 const mapStateToProps = state => {
     return {
@@ -19,10 +20,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     toggleLoginModal: () => { dispatch(toggleLoginModal()) },
     toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
-    manageLogin: (username, password) => { dispatch(manageLogin(username, password)) },
+    handleLogin: (username, password) => { dispatch(handleLogin(username, password)) },
     manageRegistration: (username, password) => { dispatch(manageRegistration(username, password)) },
     logoutUser: () => { dispatch(logoutUser()) }
 });
+
+const required = (val) => val && val.length;
+const minLength = (len) => (val) => val && (val.length >= len);
+const maxLength = (len) => (val) => !(val) || (val.length <=len);
 
 class Header extends Component {
 
@@ -32,7 +37,6 @@ class Header extends Component {
             isNavOpen: false,
         };
         this.toggleNav = this.toggleNav.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
         this.handleRegistration = this.handleRegistration.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
     }
@@ -40,11 +44,6 @@ class Header extends Component {
     handleRegistration(event) {
         event.preventDefault();
         this.props.manageRegistration(this.username.value, this.password.value)
-    };
-
-    handleLogin(event) {
-        event.preventDefault();
-        this.props.manageLogin(this.username.value, this.password.value)
     };
 
     handleLogout() {
@@ -92,17 +91,36 @@ class Header extends Component {
                 <Modal isOpen={this.props.modals.isLoginOpen} toggle={this.props.toggleLoginModal}>
                     <ModalHeader toggle={this.props.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
-                        <Form onSubmit={this.handleLogin}>
-                            <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                       innerRef={(input) => this.username = input} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" name="password"
-                                       innerRef={(input) => this.password = input}  />
-                            </FormGroup>
+                        <Form onSubmit={(values) => this.props.handleLogin(values.username, values.password)} model="loginForm">
+                            <Row className="form-group">
+                                <Label htmlFor="username" md={2}>Username: </Label>
+                                <Col md={8}>
+                                    <Control.text model=".username" id="username"
+                                                  name="username" type="text"
+                                                  className="form-control"  validators={{
+                                                      required, minLength: minLength(3), maxLength: maxLength(15)
+                                                  }}/>
+                                    <Errors className="text-danger" model=".username"
+                                            show="touched" messages={{
+                                                required: 'Required ',
+                                                minLength: 'Must be greater than 2 characters ',
+                                                maxLength: 'Must be 15 characters or less '
+                                            }}/>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="password" md={2}>Password: </Label>
+                                <Col md={8}>
+                                    <Control.text model=".password" id="password"
+                                                  name="password" type="password"
+                                                  className="form-control"  validators={{required, minLength: minLength(6)}}/>
+                                    <Errors className="text-danger" model=".password"
+                                            show="touched" messages={{
+                                                required: 'Required',
+                                                minLength: 'Must be greater than 5 characters'
+                                            }}/>
+                                </Col>
+                            </Row>
                             <ErrMess errMess={this.props.login.errMess}/>
                             <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
