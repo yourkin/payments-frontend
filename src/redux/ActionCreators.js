@@ -219,7 +219,7 @@ export const handleLogin = (username, password) => (dispatch) => {
 };
 
 
-export const manageRegistration = (username, password) => (dispatch) => {
+export const handleRegistration = (username, password) => (dispatch) => {
 
     dispatch(initRegistration());
 

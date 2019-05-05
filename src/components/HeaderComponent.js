@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
     Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
-    Button, Modal, ModalHeader, ModalBody, FormGroup, Input, Label, Col, Row } from 'reactstrap';
+    Button, Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
-import { handleLogin, manageRegistration,
-    logoutUser, toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
+import { handleLogin, handleRegistration, logoutUser,
+    toggleLoginModal, toggleRegisterModal } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import { Errors, Control, Form } from 'react-redux-form';
 
@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
     toggleLoginModal: () => { dispatch(toggleLoginModal()) },
     toggleRegisterModal: () => { dispatch(toggleRegisterModal()) },
     handleLogin: (username, password) => { dispatch(handleLogin(username, password)) },
-    manageRegistration: (username, password) => { dispatch(manageRegistration(username, password)) },
+    handleRegistration: (username, password) => { dispatch(handleRegistration(username, password)) },
     logoutUser: () => { dispatch(logoutUser()) }
 });
 
@@ -37,14 +37,8 @@ class Header extends Component {
             isNavOpen: false,
         };
         this.toggleNav = this.toggleNav.bind(this);
-        this.handleRegistration = this.handleRegistration.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
     }
-
-    handleRegistration(event) {
-        event.preventDefault();
-        this.props.manageRegistration(this.username.value, this.password.value)
-    };
 
     handleLogout() {
         this.props.logoutUser();
@@ -85,6 +79,42 @@ class Header extends Component {
                 return null;
         };
 
+        const CommonForm = () => {
+          return (
+              <>
+                  <Row className="form-group">
+                      <Label htmlFor="username" md={2}>Username: </Label>
+                      <Col md={8}>
+                          <Control.text model=".username" id="username"
+                                        name="username" type="text"
+                                        className="form-control"  validators={{
+                              required, minLength: minLength(3), maxLength: maxLength(15)
+                          }}/>
+                          <Errors className="text-danger" model=".username"
+                                  show="touched" messages={{
+                              required: 'Required ',
+                              minLength: 'Must be greater than 2 characters ',
+                              maxLength: 'Must be 15 characters or less '
+                          }}/>
+                      </Col>
+                  </Row>
+                  <Row className="form-group">
+                      <Label htmlFor="password" md={2}>Password: </Label>
+                      <Col md={8}>
+                          <Control.text model=".password" id="password"
+                                        name="password" type="password"
+                                        className="form-control"  validators={{required, minLength: minLength(6)}}/>
+                          <Errors className="text-danger" model=".password"
+                                  show="touched" messages={{
+                              required: 'Required',
+                              minLength: 'Must be greater than 5 characters'
+                          }}/>
+                      </Col>
+                  </Row>
+              </>
+          );
+        };
+
         return (
             <React.Fragment>
 
@@ -92,35 +122,7 @@ class Header extends Component {
                     <ModalHeader toggle={this.props.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={(values) => this.props.handleLogin(values.username, values.password)} model="loginForm">
-                            <Row className="form-group">
-                                <Label htmlFor="username" md={2}>Username: </Label>
-                                <Col md={8}>
-                                    <Control.text model=".username" id="username"
-                                                  name="username" type="text"
-                                                  className="form-control"  validators={{
-                                                      required, minLength: minLength(3), maxLength: maxLength(15)
-                                                  }}/>
-                                    <Errors className="text-danger" model=".username"
-                                            show="touched" messages={{
-                                                required: 'Required ',
-                                                minLength: 'Must be greater than 2 characters ',
-                                                maxLength: 'Must be 15 characters or less '
-                                            }}/>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="password" md={2}>Password: </Label>
-                                <Col md={8}>
-                                    <Control.text model=".password" id="password"
-                                                  name="password" type="password"
-                                                  className="form-control"  validators={{required, minLength: minLength(6)}}/>
-                                    <Errors className="text-danger" model=".password"
-                                            show="touched" messages={{
-                                                required: 'Required',
-                                                minLength: 'Must be greater than 5 characters'
-                                            }}/>
-                                </Col>
-                            </Row>
+                            <CommonForm />
                             <ErrMess errMess={this.props.login.errMess}/>
                             <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
@@ -130,17 +132,8 @@ class Header extends Component {
                 <Modal isOpen={this.props.modals.isRegisterOpen} toggle={this.props.toggleRegisterModal}>
                     <ModalHeader toggle={this.props.toggleRegisterModal}>Register</ModalHeader>
                     <ModalBody>
-                        <Form onSubmit={this.handleRegistration}>
-                            <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                       innerRef={(input) => this.username = input} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" name="password"
-                                       innerRef={(input) => this.password = input}  />
-                            </FormGroup>
+                        <Form onSubmit={(values) => this.props.handleRegistration(values.username, values.password)} model="registerForm">
+                            <CommonForm />
                             <ErrMess errMess={this.props.register.errMess}/>
                             <Button type="submit" value="submit" color="primary">Register</Button>
                         </Form>
