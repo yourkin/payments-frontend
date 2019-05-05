@@ -139,7 +139,7 @@ class Header extends Component {
                         <NavbarToggler onClick={this.toggleNav} />
 
                         <NavbarBrand className="mr-5">
-                            <img src="/assets/images/pay-logo.jpg" height="75" width="75" alt="Pay Logo" />
+                            <img src="/static/images/pay-logo.jpg" height="75" width="75" alt="Pay Logo" />
                         </NavbarBrand>
 
                         <Collapse isOpen={this.state.isNavOpen} navbar>
