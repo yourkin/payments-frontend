@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 import { handleLogin, handleRegistration, handleLogout,
@@ -111,8 +110,7 @@ class Header extends Component {
         };
 
         return (
-            <React.Fragment>
-
+            <>
                 <Modal isOpen={this.props.modals.isLoginOpen} toggle={this.props.toggleLoginModal}>
                     <ModalHeader toggle={this.props.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
@@ -175,8 +173,7 @@ class Header extends Component {
                         </div>
                     </div>
                 </Jumbotron>
-
-            </React.Fragment>
+            </>
         )
     }
 }
