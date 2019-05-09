@@ -61,16 +61,19 @@ class TransferFunds extends Component {
 
     render () {
 
-        const ownAccounts = this.props.accounts.accounts.filter((account) => account.client === 'andrew').map((account) => {
-            return (
-                <option key={account.uuid} value={account.uuid}>{account.currency} (available: {account.balance})</option>
-            );
+        const ownAccounts = this.props.accounts.accounts
+            .filter((account) => account.client === this.props.auth.username)
+            .map((account) => {
+                return (
+                    <option key={account.uuid} value={account.uuid}>{account.currency} (available: {account.balance})</option>
+                );
         });
 
-        const otherAccounts = this.props.accounts.accounts.map((account) => {
-            return (
-                <option key={account.uuid} value={account.uuid}>{account.client} ({account.currency})</option>
-            );
+        const otherAccounts = this.props.accounts.accounts
+            .map((account) => {
+                return (
+                    <option key={account.uuid} value={account.uuid}>{account.client} ({account.currency})</option>
+                );
         });
 
         const ErrMess = ({errMess}) => {
